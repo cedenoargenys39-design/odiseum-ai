@@ -1,4 +1,23 @@
+'use client';
+
+import { useState } from 'react';
+
 export default function Home() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const res = await fetch('/api/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email }),
+    });
+    if (res.ok) {
+      alert('¡Gracias! Te avisamos cuando esté listo.');
+    }
+  }
+
   return (
     <>
       <style>{`
@@ -216,9 +235,9 @@ export default function Home() {
           <p>Odiseum AI está en desarrollo. Únete a la lista de espera y te avisamos cuando esté listo para que seas de los primeros en probarlo.</p>
         </div>
         <div className="wl-right">
-          <input className="wl-input" type="text" placeholder="Tu nombre" />
-          <input className="wl-input" type="email" placeholder="Tu correo electrónico" />
-          <button className="wl-btn">Unirse a la lista de espera</button>
+          <input className="wl-input" type="text" placeholder="Tu nombre" value={name} onChange={(e) => setName(e.target.value)} />
+          <input className="wl-input" type="email" placeholder="Tu correo electrónico" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <button type="button" className="wl-btn" onClick={handleSubmit}>Unirse a la lista de espera</button>
           <p className="wl-note">Sin spam. Solo te avisamos cuando esté listo.</p>
         </div>
       </div>
